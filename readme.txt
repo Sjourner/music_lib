@@ -48,3 +48,40 @@ Create a web application, where:
 - User should have a view to look up a band and see all the favourite
     tracks from them
     - nice-to-have: it would be cool to generate a youtube link for them
+
+SQL structure
+
+CREATE TABLE IF NOT EXISTS "artists"
+(
+    [ArtistId] INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+    [Name] NVARCHAR(120) NULL,
+    [Comment] NVARCHAR(120) NULL,
+    [See_live] INTEGER DEFAULT 0 
+);
+CREATE TABLE IF NOT EXISTS "genres"
+(
+    [GenreId] INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+    [Name] NVARCHAR(120)
+);
+CREATE TABLE IF NOT EXISTS "albums"
+(
+    [AlbumId] INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+    [Title] NVARCHAR(160)  NOT NULL,
+    [ArtistId] INTEGER  NOT NULL,
+    [Listened] DEFAULT 0,
+    [Last_modified] DATETIME NOT NULL,
+    FOREIGN KEY ([ArtistId]) REFERENCES "artists" ([ArtistId]) 
+);
+CREATE TABLE IF NOT EXISTS "tracks"
+(
+    [TrackId] INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+    [Name] NVARCHAR(200)  NOT NULL,
+    [ArtistId] INTEGER,
+    [AlbumId] INTEGER,
+    [Track_type] INTEGER,
+    [Entry_date] DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY ([ArtistId]) REFERENCES "artists" ([ArtistId])
+);
+CREATE INDEX [IFK_AlbumArtistId] ON "albums" ([ArtistId]);
+CREATE INDEX [IFK_TrackAlbumId] ON "tracks" ([AlbumId]);
+CREATE INDEX [IFK_TrackArtistId] ON "tracks" ([ArtistId]);
